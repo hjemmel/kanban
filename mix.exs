@@ -43,6 +43,7 @@ defmodule Kanban.MixProject do
       {:phoenix_live_view, "~> 0.18.16"},
       {:heroicons, "~> 0.5"},
       {:floki, ">= 0.30.0", only: :test},
+      {:excoveralls, "~> 0.18", only: :test},
       {:phoenix_live_dashboard, "~> 0.7.2"},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev},
@@ -68,7 +69,17 @@ defmodule Kanban.MixProject do
       setup: ["deps.get", "assets.setup", "assets.build"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      ci: [
+        "compile --warnings-as-errors",
+        "test --max-failures 1 --trace --warnings-as-errors",
+        "format --check-formatted",
+        "deps.unlock --check-unused",
+        "coveralls.json"
+      ],
+      ci_dev: [
+        "dialyzer --format github"
+      ]
     ]
   end
 end
