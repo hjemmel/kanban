@@ -90,8 +90,7 @@ defmodule Kanban.MixProject do
         "compile --warnings-as-errors",
         "test --max-failures 1 --trace --warnings-as-errors",
         "format --check-formatted",
-        "deps.unlock --check-unused",
-        "coveralls.json"
+        "deps.unlock --check-unused"
       ],
       ci_dev: [
         "dialyzer --format github"

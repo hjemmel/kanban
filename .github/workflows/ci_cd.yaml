@@ -60,10 +60,12 @@ jobs:
           mix ci
           mix ci_dev
 
+      - name: Coverage
+        run: mix coveralls.json
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          files: ./cover/excoveralls.json
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: hjemmel/kaban
 
