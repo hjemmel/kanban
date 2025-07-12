@@ -29,6 +29,21 @@ defmodule Kanban.MixProject do
     ]
   end
 
+  def cli do
+    [
+      preferred_envs: [
+        ci: :test,
+        ci_dev: :dev,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.cobertura": :test,
+        "coveralls.json": :test
+      ]
+    ]
+  end
+
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
