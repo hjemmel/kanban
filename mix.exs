@@ -10,6 +10,7 @@ defmodule Kanban.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      test_coverage: [tool: ExCoveralls],
       dialyzer: [
         plt_core_path: "priv/plts/core.plt",
         plt_file: {:no_warn, "priv/plts/project.plt"},
@@ -28,6 +29,21 @@ defmodule Kanban.MixProject do
     ]
   end
 
+  def cli do
+    [
+      preferred_envs: [
+        ci: :test,
+        ci_dev: :dev,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.cobertura": :test,
+        "coveralls.json": :test
+      ]
+    ]
+  end
+
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
@@ -43,6 +59,7 @@ defmodule Kanban.MixProject do
       {:phoenix_live_view, "~> 0.18.16"},
       {:heroicons, "~> 0.5"},
       {:floki, ">= 0.30.0", only: :test},
+      {:excoveralls, "~> 0.18", only: :test},
       {:phoenix_live_dashboard, "~> 0.7.2"},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev},
@@ -68,7 +85,16 @@ defmodule Kanban.MixProject do
       setup: ["deps.get", "assets.setup", "assets.build"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      ci: [
+        "compile --warnings-as-errors",
+        "test --max-failures 1 --trace --warnings-as-errors",
+        "format --check-formatted",
+        "deps.unlock --check-unused"
+      ],
+      ci_dev: [
+        "dialyzer --format github"
+      ]
     ]
   end
 end

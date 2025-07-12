@@ -25,25 +25,18 @@ jobs:
       - name: Cache deps directory
         uses: actions/cache@v4
         id: cache-deps
+        env:
+          ELIXIR_VERSION: ${{ steps.setup-beam.outputs.elixir-version }}
+          ERLANG_VERSION: ${{ steps.setup-beam.outputs.otp-version }}
         with:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          key: ${{ runner.os }}-mix-${{ env.ELIXIR_VERSION }}-${{ env.ERLANG_VERSION }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
+            ${{ runner.os }}-mix-${{ env.ELIXIR_VERSION }}-${{ env.ERLANG_VERSION }}-
+            ${{ runner.os }}-mix-${{ env.ELIXIR_VERSION }}-
             ${{ runner.os }}-mix-
-
-      - name: Get dependencies
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: mix deps.get
-
-      - run: mix compile --warnings-as-errors
-
-      - name: Run tests
-        run: mix test --max-failures 1 --trace --warnings-as-errors
-
-      - name: Check code is formatted
-        run: mix format --check-formatted
 
       - name: Cache plt files
         uses: actions/cache@v4
@@ -58,11 +51,23 @@ jobs:
           restore-keys: |
             ${{ env.KEY_BASE }}-
 
-      - name: Dialyzer static analysis
-        run: mix dialyzer --format github
+      - name: Get dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: mix deps.get
 
-      - name: Check unused dependencies
-        run: mix deps.unlock --check-unused
+      - name: CI (compile, format, test, unused_deps)
+        run: |-
+          mix ci
+          mix ci_dev
+
+      - name: Coverage
+        run: mix coveralls.json
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: hjemmel/kanban
 
   build_push:
     runs-on: ubuntu-22.04
