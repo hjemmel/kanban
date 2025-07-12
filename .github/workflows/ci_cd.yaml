@@ -56,4 +56,4 @@ jobs:
             ${{ env.KEY_BASE }}-
 
       - name: Dialyzer static analysis
-        run: mix dialyzer --format githu
+        run: mix dialyzer --format github
