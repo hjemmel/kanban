@@ -7,6 +7,7 @@ ARG BUILDER_IMG="hexpm/elixir:${EX_VSN}-erlang-${OTP_VSN}-debian-${DEB_VSN}"
 ARG RUNNER_IMG="debian:${DEB_VSN}"
 
 FROM ${BUILDER_IMG} AS builder
+ENV ERL_FLAGS="+JPperf true"
 
 # prepare build dir
 WORKDIR /app
