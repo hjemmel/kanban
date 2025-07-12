@@ -67,7 +67,7 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: hjemmel/kaban
+          slug: hjemmel/kanban
 
   build_push:
     runs-on: ubuntu-22.04
