@@ -68,3 +68,7 @@ crash.log
 
 # For built boxes
 *.box
+
+*.pem
+
+.DS_Store
