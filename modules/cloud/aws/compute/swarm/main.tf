@@ -66,6 +66,11 @@ resource "aws_instance" "my_swarm" {
     "Name" = "docker-swarm-manager"
   }
 
+  user_data = <<-EOF
+    #!/usr/bin/env bash
+    docker swarm init
+  EOF
+
   vpc_security_group_ids = [
     aws_security_group.swarm_sg.id
   ]
