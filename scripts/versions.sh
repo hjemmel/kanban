@@ -16,8 +16,11 @@ ELIXIR_VERSION=$(echo "$version_output" \
 # extract Erlang version
 ERLANG_VERSION=$(echo "$version_output" | grep 'erlang' | cut -d' ' -f2)
 
+PACKER_VERSION=$(echo "$version_output" | grep 'packer' | cut -d' ' -f2)
+
 # add the variables to the `GITHUB_ENV` (env used by the action's runner)
 {
   echo "ELIXIR_VERSION=${ELIXIR_VERSION}";
   echo "ERLANG_VERSION=${ERLANG_VERSION}";
+  echo "PACKER_VERSION=${PACKER_VERSION}";
 } >> "$GITHUB_ENV"
