@@ -39,6 +39,9 @@ services:
       bash -c "bin/migrate && bin/server"
     ports:
       - 4000:4000
+    secrets:
+      - databaseurl
+      - secretkeybase
 
 secrets:
   postgrespassword:
