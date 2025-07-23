@@ -3,6 +3,8 @@
 services:
   db:
     image: postgres:15.2
+    secrets:
+      - postgrespassword
     healthcheck:
       test: ["CMD", "pg_isready", "--username=postgres"]
       interval: 10s
@@ -12,7 +14,7 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgrespassword
       PGDATA: /var/lib/postgresql/data
     ports:
       - ${POSTGRES_PORT:-5432}
@@ -30,13 +32,21 @@ services:
         max_attempts: 3
         window: 120s
     environment:
-      DATABASE_URL: ecto://postgres:postgres@db/postgres
-      SECRET_KEY_BASE: IAeyxwyAk93bEBF9HlBr6jrdJJeeCozuIcZhkQBV+Ia4SmnnwYCAQtlPwyF7rXXN
+      DATABASE_URL_FILE: /run/secrets/databaseurl
+      SECRET_KEY_BASE_FILE: /run/secrets/secretkeybase
       PHX_HOST: "localhost"
     command: >
       bash -c "bin/migrate && bin/server"
     ports:
       - 4000:4000
+
+secrets:
+  postgrespassword:
+    file: ./secrets/.postgrespassword
+  secretkeybase:
+    file: ./secrets/.secretkeybase
+  databaseurl:
+    file: ./secrets/.databaseurl
 
 volumes:
   db_data:

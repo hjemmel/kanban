@@ -1,4 +1,4 @@
 variable "ami_regions" {
-  type = list(string)
+  type        = list(string)
   description = "A list of regions where the AMI will be copied to."
 }
