@@ -2,7 +2,7 @@ packer {
   required_plugins {
     amazon = {
       version = ">= 0.0.2"
-      source = "github.com/hashicorp/amazon"
+      source  = "github.com/hashicorp/amazon"
     }
   }
 }
@@ -11,16 +11,16 @@ source "amazon-ebs" "base" {
   ami_regions = var.ami_regions
   source_ami_filter {
     filters = {
-      name = "al2023-ami-2023*"
+      name         = "al2023-ami-2023*"
       architecture = "x86_64"
     }
     most_recent = true
-    owners = ["amazon"]
+    owners      = ["amazon"]
   }
 
   instance_type = "t2.micro"
-  ssh_username = "ec2-user"
-  ami_name = "amazon-linux-docker_{{timestamp}}"
+  ssh_username  = "ec2-user"
+  ami_name      = "amazon-linux-docker_{{timestamp}}"
 }
 
 build {
