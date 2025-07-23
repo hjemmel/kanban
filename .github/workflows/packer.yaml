@@ -10,9 +10,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
+  check:
     runs-on: ubuntu-latest
-    name: Compile with mix test, format, dialyzer & unused deps check
+    name: Check packer file format
     steps:
       - uses: actions/checkout@v4
 

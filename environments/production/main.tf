@@ -17,6 +17,15 @@ module "repository_secrets" {
   github_owner = "hjemmel"
 }
 
+module "contributing_workflow" {
+  source       = "../../modules/integrations/github/contributing_workflow"
+  repository   = "kanban"
+  github_owner = "hjemmel"
+  status_checks = [
+    "Compile with mix test, format, dialyzer & unused deps check"
+  ]
+}
+
 output "swarm_ssh_command" {
   value = module.swarm.ssh_command
 }
