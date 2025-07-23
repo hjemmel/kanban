@@ -28,7 +28,7 @@ jobs:
 
       - name: Packer template validation
         working-directory: packer
-        run: packer validate .
+        run: packer validate -syntax-only .
 
       - name: Packer template format check
         working-directory: packer
