@@ -17,3 +17,9 @@ variable "gh_pat" {
   type        = string
   sensitive   = true
 }
+
+variable "code_cov" {
+  description = "Code coverage token to upload coverage reports to codecov.io"
+  type        = string
+  sensitive   = true
+}
