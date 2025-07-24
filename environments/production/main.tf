@@ -9,7 +9,7 @@ module "repository_secrets" {
     "PRIVATE_KEY"           = module.swarm.private_key,
     "AWS_ACCESS_KEY_ID"     = var.aws_access_key_id,
     "AWS_SECRET_ACCESS_KEY" = var.aws_secret_access_key,
-    "AGE_KEY"               = var.age_key,
+    "AGE_KEY"               = module.sops.private_key,
     "GH_PAT"                = var.gh_pat,
     "CODE_COV_TOKEN"        = var.code_cov
   }
@@ -28,4 +28,14 @@ module "contributing_workflow" {
 
 output "swarm_ssh_command" {
   value = module.swarm.ssh_command
+}
+
+output "age_public_key" {
+  value = module.sops.public_key
+}
+
+module "sops" {
+  source                = "../../modules/integrations/sops"
+  private_key_file_path = "${path.module}/key.txt"
+  sops_config_file_path = "../../.sops.yaml"
 }
