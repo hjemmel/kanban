@@ -1,3 +1,8 @@
+variable "account_id" {
+  type        = string
+  description = "AWS account ID"
+}
+
 variable "aws_access_key_id" {
   description = "The AWS access key ID."
   type        = string
