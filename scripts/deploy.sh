@@ -33,7 +33,7 @@ if [ -z "$GITHUB_TOKEN" ] || [ -z "$GITHUB_USER" ]; then
 fi
 
 # set default variables
-IMAGE=${1:-"ghcr.io/beamops/kanban:latest"}
+IMAGE=${1:-"ghcr.io/hjemmel/kanban:latest"}
 AWS_REGION="ap-southeast-2"
 INSTANCE_TAG_NAME="docker-swarm-manager"
 STACK_NAME="kanban"
@@ -73,6 +73,7 @@ echo "$GITHUB_TOKEN" | docker login ghcr.io \
 # deploy the application
 DOCKER_HOST="ssh://ec2-user@$MANAGER_IP" \
 WEB_IMAGE="$IMAGE" \
+POSTGRES_PORT="5432:5432" \
 docker stack deploy -c "$COMPOSE_FILE_PATH" --with-registry-auth "$STACK_NAME"
 
 echo "Deployment completed."

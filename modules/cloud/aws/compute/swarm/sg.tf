@@ -24,6 +24,13 @@ resource "aws_security_group" "swarm_sg" {
     cidr_blocks = [data.aws_vpc.main.cidr_block]
   }
   ingress {
+    description = "Docker container network discovery"
+    from_port   = 7946
+    to_port     = 7946
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.main.cidr_block]
+  }
+  ingress {
     description = "Docker overlay network"
     from_port   = 4789
     to_port     = 4789

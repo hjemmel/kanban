@@ -15,18 +15,21 @@ services:
         condition: on-failure
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/postgrespassword
-      PGDATA: /var/lib/postgresql/data
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - ${POSTGRES_PORT:-5432}
     volumes:
       - db_data:/var/lib/postgresql/data
 
   web:
-    image: ${WEB_IMAGE:-ghcr.io/beamops/kanban:latest}
+    image: ${WEB_IMAGE:-ghcr.io/hjemmel/kanban:latest}
     depends_on:
       - db
     deploy:
       replicas: ${WEB_REPLICAS:-1}
+      placement:
+        preferences:
+          - spread: node.hostname
       restart_policy:
         condition: on-failure
         delay: 5s

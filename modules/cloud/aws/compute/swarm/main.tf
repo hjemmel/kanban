@@ -69,32 +69,30 @@ resource "aws_key_pair" "deployer_key" {
 
 
 resource "aws_instance" "swarm_node" {
-  ami                  = data.aws_ami.amazon_linux_docker.id
-  instance_type        = "t2.micro"
-  key_name             = aws_key_pair.deployer_key.key_name
-  iam_instance_profile = aws_iam_instance_profile.main_profile.name
+  ami           = data.aws_ami.amazon_linux_docker.id
+  count         = var.number_of_nodes
+  instance_type = "t2.micro"
 
+  key_name = aws_key_pair.deployer_key.key_name
   subnet_id = data.aws_subnets.main_subnets.ids[
     count.index % length(data.aws_subnets.main_subnets.ids)
   ]
-  count = var.number_of_nodes
 
-
-  user_data = count.index == 0 ? local.init_script : local.join_script
+  iam_instance_profile = aws_iam_instance_profile.main_profile.name
+  user_data            = count.index == 0 ? local.init_script : local.join_script
 
   tags = {
-    "Name" = local.manager_tag
+    Name = local.manager_tag
   }
-
   vpc_security_group_ids = [
     aws_security_group.swarm_sg.id
   ]
 
-  depends_on = [aws_ssm_parameter.swarm_token]
-
   lifecycle {
     ignore_changes = [tags]
   }
+
+  depends_on = [aws_ssm_parameter.swarm_token]
 }
 
 resource "aws_ssm_parameter" "swarm_token" {
