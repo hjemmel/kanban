@@ -17,9 +17,10 @@ defmodule Kanban.Application do
       # Start Finch
       {Finch, name: Kanban.Finch},
       # Start the Endpoint (http/https)
-      KanbanWeb.Endpoint
+      KanbanWeb.Endpoint,
       # Start a worker by calling: Kanban.Worker.start_link(arg)
       # {Kanban.Worker, arg}
+      {DNSCluster, query: "tasks.web"}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
